@@ -47,7 +47,7 @@ public class DnsPodServerImpl implements DnsPodServer {
 
 
     OkHttpClient client = new OkHttpClient();
-    Record record = new Record(loginToken, "json", lang, domain);
+    Record record = new Record(loginToken, lang, domain);
     FormBody.Builder builder = new FormBody.Builder();
 
     /**

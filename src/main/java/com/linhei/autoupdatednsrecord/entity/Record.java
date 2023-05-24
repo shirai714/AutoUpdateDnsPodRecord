@@ -1,6 +1,7 @@
 package com.linhei.autoupdatednsrecord.entity;
 
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 /**
@@ -24,7 +25,7 @@ public class Record {
      * recordLineId:记录线路ID
      */
     String loginToken;
-    String format;
+    String format = "json";
     String lang;
     String domain;
     Long domainId;
@@ -38,21 +39,19 @@ public class Record {
     public Record() {
     }
 
-    public Record(String loginToken, String format, String lang, String domain) {
+    public Record(String loginToken, String lang, String domain) {
         this.loginToken = loginToken;
-        this.format = format;
         this.lang = lang;
         this.domain = domain;
     }
 
-    public Record(String loginToken, String format, String lang, Long domainId) {
+    public Record(String loginToken, String lang, Long domainId) {
         this.loginToken = loginToken;
-        this.format = format;
         this.lang = lang;
         this.domainId = domainId;
     }
 
-    public Record(String loginToken, String format, String lang, String domain, String keyword, Integer length) {
+    public Record(String loginToken, String lang, String domain, String keyword, Integer length) {
         this.loginToken = loginToken;
         this.format = format;
         this.lang = lang;
@@ -61,7 +60,7 @@ public class Record {
         this.length = length;
     }
 
-    public Record(String loginToken, String format, String lang, Long domainId, String keyword, Integer length) {
+    public Record(String loginToken, String lang, Long domainId, String keyword, Integer length) {
         this.loginToken = loginToken;
         this.format = format;
         this.lang = lang;
