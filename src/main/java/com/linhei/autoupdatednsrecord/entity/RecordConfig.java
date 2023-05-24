@@ -3,7 +3,7 @@ package com.linhei.autoupdatednsrecord.entity;
 /**
  * @author linhei
  */
-public class RecordType {
+public class RecordConfig {
     public static final String A;
     public static final String CNAME;
     public static final String MX;
@@ -15,7 +15,8 @@ public class RecordType {
     public static final String HTTPS;
     public static final String SVCB;
     public static final String SPF;
-
+    public static final String JSON;
+    public static final String XML;
 
     static {
         A = "A";
@@ -29,5 +30,7 @@ public class RecordType {
         HTTPS = "HTTPS";
         SVCB = "SVCB";
         SPF = "SPF";
+        JSON = "json";
+        XML = "xml";
     }
 }

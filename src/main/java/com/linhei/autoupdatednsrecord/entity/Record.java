@@ -25,7 +25,7 @@ public class Record {
      * recordLineId:记录线路ID
      */
     String loginToken;
-    String format = "json";
+    String format = RecordConfig.JSON;
     String lang;
     String domain;
     Long domainId;

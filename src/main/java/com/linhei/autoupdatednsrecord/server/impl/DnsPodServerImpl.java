@@ -10,6 +10,7 @@ import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
+//@ConfigurationProperties(prefix = "record")
 public class DnsPodServerImpl implements DnsPodServer {
     /**
      * 不接收配置文件的配置
@@ -38,7 +40,7 @@ public class DnsPodServerImpl implements DnsPodServer {
      * 域名
      * 返回语言
      */
-    @Value("${record.token}")
+    @Value("${record.login_token}")
     private String loginToken;
     @Value("${record.domain}")
     private String domain;

@@ -5,6 +5,3 @@ spring:
 
 debug: false
 
-
-#tmp:
-#  temp: "tmp"

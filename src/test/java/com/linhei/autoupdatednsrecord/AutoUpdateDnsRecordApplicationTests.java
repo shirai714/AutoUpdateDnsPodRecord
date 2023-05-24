@@ -3,14 +3,13 @@ package com.linhei.autoupdatednsrecord;
 import com.alibaba.fastjson2.JSONObject;
 
 import com.linhei.autoupdatednsrecord.entity.CreateRecord;
-import com.linhei.autoupdatednsrecord.entity.RecordType;
+import com.linhei.autoupdatednsrecord.entity.RecordConfig;
 import com.linhei.autoupdatednsrecord.entity.Records;
 import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import com.linhei.autoupdatednsrecord.server.impl.DnsPodServerImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,7 @@ class AutoUpdateDnsRecordApplicationTests {
         long start = System.currentTimeMillis();
         File file = new File("records.json");
 
-        CreateRecord test = new CreateRecord("test", RecordType.A, "默认", "ip", "1", "60");
+        CreateRecord test = new CreateRecord("test", RecordConfig.A, "默认", "ip", "1", "60");
         try {
 
             // 使用删除方法删除刚刚添加的记录
