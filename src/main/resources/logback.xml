@@ -9,7 +9,7 @@
     </appender>
 
     <!-- 定义根日志记录器 -->
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="Console" />
     </root>
 

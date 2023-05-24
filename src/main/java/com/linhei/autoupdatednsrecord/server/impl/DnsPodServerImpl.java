@@ -4,11 +4,13 @@ package com.linhei.autoupdatednsrecord.server.impl;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.linhei.autoupdatednsrecord.entity.CreateRecord;
-import com.linhei.autoupdatednsrecord.entity.Records;
 import com.linhei.autoupdatednsrecord.entity.Record;
+import com.linhei.autoupdatednsrecord.entity.Records;
 import com.linhei.autoupdatednsrecord.server.DnsPodServer;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,25 +22,32 @@ import java.util.Map;
  *
  * @author linhei
  */
+@Service
+@Slf4j
 public class DnsPodServerImpl implements DnsPodServer {
     /**
-     * token
-     * 返回格式
-     * 返回语言
-     * 域名
+     * 不接收配置文件的配置
      * 正确访问返回code
      * 返回信息
      */
-    final static String LOGIN_TOKEN = "dnsPod token";
-    final static String FORMAT = "json";
-    final static String LANG = "cn";
-    final static String DOMAIN = "domain";
-    final static String SUCCESSFUL = "\"code\": \"1\"";
-    final static String MESSAGE = "message";
+    private final static String SUCCESSFUL = "\"code\": \"1\"";
+    private final static String MESSAGE = "message";
+
+    /**
+     * token
+     * 域名
+     * 返回语言
+     */
+    @Value("${record.token}")
+    private String loginToken;
+    @Value("${record.domain}")
+    private String domain;
+    @Value("${record.lang}")
+    private String lang = "cn";
 
 
     OkHttpClient client = new OkHttpClient();
-    Record record = new Record(LOGIN_TOKEN, FORMAT, LANG, DOMAIN);
+    Record record = new Record(loginToken, "json", lang, domain);
     FormBody.Builder builder = new FormBody.Builder();
 
     /**

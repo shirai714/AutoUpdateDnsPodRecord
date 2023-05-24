@@ -1,1 +1,10 @@
+spring:
+  config:
+    import:
+      - file:external.yml
 
+debug: false
+
+
+#tmp:
+#  temp: "tmp"
