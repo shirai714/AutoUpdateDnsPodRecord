@@ -71,7 +71,6 @@ public class MailServerImpl implements MailServer {
             updateConfigProperty("mail_server.last_size", String.valueOf(lastSize));
         }
         inbox.close();
-//        store.close();
     }
 
     /**
