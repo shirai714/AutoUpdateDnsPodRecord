@@ -25,7 +25,6 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-//@ConfigurationProperties(prefix = "record")
 public class DnsPodServerImpl implements DnsPodServer {
     /**
      * 不接收配置文件的配置
@@ -38,14 +37,14 @@ public class DnsPodServerImpl implements DnsPodServer {
     /**
      * token
      * 域名
-     * 返回语言
+     * 返回信息的语言
      */
-    @Value("${record.login_token}")
+    @Value("${record.login_token:}")
     private String loginToken;
-    @Value("${record.domain}")
+    @Value("${record.domain:}")
     private String domain;
-    @Value("${record.lang}")
-    private String lang = "cn";
+    @Value("${record.lang:cn}")
+    private String lang;
 
 
     OkHttpClient client = new OkHttpClient();

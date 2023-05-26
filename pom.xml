@@ -64,6 +64,13 @@
             <version>3.0.4</version>
         </dependency>
 
+        <!--    yamlBeans    -->
+        <dependency>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.15</version>
+        </dependency>
+
 
     </dependencies>
 
