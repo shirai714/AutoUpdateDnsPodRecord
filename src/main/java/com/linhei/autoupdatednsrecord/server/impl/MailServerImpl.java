@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.linhei.autoupdatednsrecord.entity.Records;
 import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import com.linhei.autoupdatednsrecord.server.MailServer;
+import com.linhei.autoupdatednsrecord.utils.RedisUtil;
 import com.linhei.autoupdatednsrecord.utils.Utils;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +39,18 @@ public class MailServerImpl implements MailServer {
     private MailProperties mailProperties;
     @Autowired
     private DnsPodServer dnsPodServer;
+    @Autowired
+    private RedisUtil redisUtil;
 
     private final Utils util = new Utils();
 
-    @Value("${mail_server.last_size:-1}")
+    @Value("${mailConfig.lastSize:-1}")
     private String lastSize;
+    @Value("${mailConfig.redisConfig.lastIpaddrKey:}")
+    private String lastIpaddrKey;
+
+    @Value("${spring.config.import[0]:}")
+    private String path;
     /**
      * 收件箱持续连接
      * File 打开文件
@@ -51,7 +59,8 @@ public class MailServerImpl implements MailServer {
      * 上次更改的ip
      */
     Folder inbox = null;
-    File file = new File("./external.yml");
+    //    File file = new File("./external.yml");
+    File file;
     private static final String ERROR = "【D监控】网站故障提醒";
     private String recordListJson;
     private String lastIpaddr;
@@ -96,7 +105,7 @@ public class MailServerImpl implements MailServer {
 
     private void editLastSize(int n) throws IOException {
         lastSize = String.valueOf(n);
-        updateConfigProperty("mail_server.last_size", lastSize);
+        updateConfigProperty("mailConfig.lastSize", lastSize);
     }
 
     private String getLastIpAddr() throws IOException {
@@ -118,6 +127,7 @@ public class MailServerImpl implements MailServer {
      */
     @Override
     public void updateConfigProperty(String key, String value) throws IOException {
+        if (file == null) file = new File("./" + path.split(":")[1]);
         String yamlContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         // 解析 YAML 内容为 Map 对象
         Yaml yaml = new Yaml();

@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
 @Slf4j
@@ -84,6 +85,17 @@ class AutoUpdateDnsRecordApplicationTests {
     void checkRedisConfig() {
         try {
             System.out.println(dnsPodServer.getRecordListJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void fileTest() {
+        File file = new File("file:external.yml");
+        try {
+            String s = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            log.info(s);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
