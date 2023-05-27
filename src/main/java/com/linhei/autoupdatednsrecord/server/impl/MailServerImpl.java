@@ -101,7 +101,7 @@ public class MailServerImpl implements MailServer {
 
     private String getLastIpAddr() throws IOException {
         String json = dnsPodServer.getRecordJson("@", "A", "默认");
-        JSONArray jsonArray = JSON.parseArray(JSONObject.parseObject(json).get("records").toString());
+        JSONArray jsonArray = JSON.parseArray(json);
         String ip = "";
         for (Object o : jsonArray) {
             ip = new Records(JSONObject.parseObject(String.valueOf(o)).toString()).getValue();

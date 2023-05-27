@@ -10,7 +10,6 @@ import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -48,13 +47,14 @@ public class DnsPodServerImpl implements DnsPodServer {
 
 
     OkHttpClient client = new OkHttpClient();
-    Record record = new Record(loginToken, lang, domain);
+    Record record = null;
     FormBody.Builder builder = new FormBody.Builder();
 
     /**
      * 将token和域名信息添加到 FormBody.Builder 中
      */
     private void setBuilder() {
+        if (record == null) record = new Record(loginToken, lang, domain);
         setParameter(JSON.parseObject(record.toJson()));
     }
 
