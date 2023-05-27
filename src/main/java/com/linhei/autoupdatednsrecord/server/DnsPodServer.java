@@ -37,6 +37,59 @@ public interface DnsPodServer {
     String getRecordListJson(String keyword) throws IOException;
 
     /**
+     * 查询单个记录的带参数的请求
+     *
+     * @param subDomain    子域名
+     * @param recordType   记录类型
+     * @param recordLine   记录线路
+     * @param recordLineId 记录类型ID
+     * @return JSON的返回
+     * @throws IOException 访问出错
+     */
+    String getRecordJson(String subDomain, String recordType, String recordLine, Integer recordLineId) throws IOException;
+
+    /**
+     * 查询单个记录的带参数的请求
+     *
+     * @param subDomain  子域名
+     * @param recordType 记录类型
+     * @param recordLine 记录线路
+     * @return JSON的返回
+     * @throws IOException 访问出错
+     */
+    String getRecordJson(String subDomain, String recordType, String recordLine) throws IOException;
+
+    /**
+     * 查询单个记录的带参数的请求
+     *
+     * @param subDomain    子域名
+     * @param recordType   记录类型
+     * @param recordLineId 记录线路ID
+     * @return JSON的返回
+     * @throws IOException 访问出错
+     */
+    String getRecordJson(String subDomain, String recordType, Integer recordLineId) throws IOException;
+
+    /**
+     * 查询单个记录的带参数的请求
+     *
+     * @param subDomain  子域名
+     * @param recordType 记录类型
+     * @return JSON的返回
+     * @throws IOException 访问出错
+     */
+    String getRecordJson(String subDomain, String recordType) throws IOException;
+
+    /**
+     * 查询单个记录的带参数的请求
+     *
+     * @param subDomain 子域名
+     * @return JSON的返回
+     * @throws IOException 访问出错
+     */
+    String getRecordJson(String subDomain) throws IOException;
+
+    /**
      * 查询带参数的请求
      *
      * @param keyword 关键字
@@ -91,4 +144,12 @@ public interface DnsPodServer {
      * @throws IOException 访问出错
      */
     String modifyRecord(String json) throws IOException;
+
+    /**
+     * 获取当前网络的公网IP
+     *
+     * @return 公网IP
+     * @throws IOException 访问出错
+     */
+    String getPublicIp() throws IOException;
 }

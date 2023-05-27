@@ -1,6 +1,12 @@
 package com.linhei.autoupdatednsrecord.server.impl;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import com.linhei.autoupdatednsrecord.entity.Records;
+import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import com.linhei.autoupdatednsrecord.server.MailServer;
+import com.linhei.autoupdatednsrecord.utils.Utils;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -16,7 +22,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -30,17 +36,25 @@ public class MailServerImpl implements MailServer {
 
     @Autowired
     private MailProperties mailProperties;
+    @Autowired
+    private DnsPodServer dnsPodServer;
+
+    private final Utils util = new Utils();
 
     @Value("${mail_server.last_size:-1}")
     private String lastSize;
     /**
      * 收件箱持续连接
      * File 打开文件
-     * Map用于处理子字段
+     * D监控提醒
+     * 纪录列表
+     * 上次更改的ip
      */
     Folder inbox = null;
     File file = new File("./external.yml");
-    private Map<String, Object> valueMap;
+    private static final String ERROR = "【D监控】网站故障提醒";
+    private String recordListJson;
+    private String lastIpaddr;
 
     @Override
     @Scheduled(fixedDelay = 5000)
@@ -59,18 +73,41 @@ public class MailServerImpl implements MailServer {
             store.close();
         }
 
-
         inbox.open(Folder.READ_ONLY);
         Message[] messages = inbox.getMessages();
         int n = messages.length;
         if (n > 0 && n > Integer.parseInt(lastSize)) {
-            Message latestMessage = messages[n - 1];
-            log.info(latestMessage.getSubject());
-            lastSize = String.valueOf(n);
-            log.info(lastSize);
-            updateConfigProperty("mail_server.last_size", String.valueOf(lastSize));
-        }
+            if (messages[n - 1].getSubject().contains(ERROR)) {
+                if (recordListJson == null) recordListJson = dnsPodServer.getRecordListJson();
+                if (this.lastIpaddr == null) lastIpaddr = getLastIpAddr();
+                String publicIp = dnsPodServer.getPublicIp();
+                recordListJson = recordListJson.replaceAll(lastIpaddr, publicIp);
+                // 记录日志
+                log.info(dnsPodServer.modifyRecord(recordListJson));
+                // 更新上次的IP
+                lastIpaddr = publicIp;
+            }
+            // 修改上次读取邮箱时的邮箱大小
+            editLastSize(n);
+        } else if (n < Integer.parseInt(lastSize)) editLastSize(n);
+
         inbox.close();
+    }
+
+    private void editLastSize(int n) throws IOException {
+        lastSize = String.valueOf(n);
+        updateConfigProperty("mail_server.last_size", lastSize);
+    }
+
+    private String getLastIpAddr() throws IOException {
+        String json = dnsPodServer.getRecordJson("@", "A", "默认");
+        JSONArray jsonArray = JSON.parseArray(JSONObject.parseObject(json).get("records").toString());
+        String ip = "";
+        for (Object o : jsonArray) {
+            ip = new Records(JSONObject.parseObject(String.valueOf(o)).toString()).getValue();
+            if (util.isValidIpv4Address(ip)) break;
+        }
+        return ip;
     }
 
     /**
@@ -86,17 +123,35 @@ public class MailServerImpl implements MailServer {
         Yaml yaml = new Yaml();
         Map<String, Object> yamlMap = yaml.load(yamlContent);
 
-        // 更新指定键的值
-        String[] split = key.split("\\.");
-        String mapKey = split[0];
-        if (this.valueMap == null)
-            valueMap = (Map<String, Object>) yamlMap.getOrDefault(mapKey, new HashMap<>(1));
-        valueMap.put(split[1], value);
-        yamlMap.put(split[0], valueMap);
+        // 递归修改指定键的值
+        updatePropertyValue(yamlMap, key, value);
 
         // 转换为更新后的 YAML 字符串
         String updatedYamlContent = yaml.dump(yamlMap);
 
         FileUtils.writeStringToFile(file, updatedYamlContent, StandardCharsets.UTF_8);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updatePropertyValue(Map<String, Object> yamlMap, String key, String value) {
+        String[] split = key.split("\\.");
+        String mapKey = split[0];
+        if (split.length == 1)
+            // 最后一层键，直接修改值或新建键值对
+            yamlMap.put(mapKey, value);
+        else
+            // 非最后一层键，递归调用更新子层或新建子层
+            if (yamlMap.containsKey(mapKey)) {
+                Object childObject = yamlMap.get(mapKey);
+                if (childObject instanceof Map) {
+                    Map<String, Object> childMap = (Map<String, Object>) childObject;
+                    updatePropertyValue(childMap, key.substring(key.indexOf('.') + 1), value);
+                }
+            } else {
+                Map<String, Object> childMap = new LinkedHashMap<>();
+                yamlMap.put(mapKey, childMap);
+                updatePropertyValue(childMap, key.substring(key.indexOf('.') + 1), value);
+            }
+
     }
 }
