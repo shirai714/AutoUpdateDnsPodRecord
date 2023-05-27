@@ -10,13 +10,18 @@ import com.linhei.autoupdatednsrecord.server.impl.DnsPodServerImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
 
-//@SpringBootTest
+@SpringBootTest
 @Slf4j
 class AutoUpdateDnsRecordApplicationTests {
+
+    @Autowired
+    DnsPodServer dnsPodServer;
 
     @Test
     void contextLoads() {
@@ -75,4 +80,12 @@ class AutoUpdateDnsRecordApplicationTests {
 
     }
 
+    @Test
+    void checkRedisConfig() {
+        try {
+            System.out.println(dnsPodServer.getRecordListJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
