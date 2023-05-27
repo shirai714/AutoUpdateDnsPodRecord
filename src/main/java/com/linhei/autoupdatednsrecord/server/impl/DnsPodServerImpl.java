@@ -101,6 +101,35 @@ public class DnsPodServerImpl implements DnsPodServer {
     }
 
     @Override
+    public String getRecordJson(String subDomain, String recordType, String recordLine, Integer recordLineId) throws IOException {
+        if (subDomain != null) this.record.setSubDomain(subDomain);
+        if (recordType != null) this.record.setRecordType(recordType);
+        if (recordLine != null) this.record.setRecordLine(recordLine);
+        if (recordLineId != null) this.record.setRecordLineId(recordLineId);
+        return getRecordListJson();
+    }
+
+    @Override
+    public String getRecordJson(String subDomain, String recordType, String recordLine) throws IOException {
+        return getRecordJson(subDomain, recordType, recordLine, null);
+    }
+
+    @Override
+    public String getRecordJson(String subDomain, String recordType) throws IOException {
+        return getRecordJson(subDomain, recordType, null, null);
+    }
+
+    @Override
+    public String getRecordJson(String subDomain, String recordType, Integer recordLineId) throws IOException {
+        return getRecordJson(subDomain, recordType, null, recordLineId);
+    }
+
+    @Override
+    public String getRecordJson(String subDomain) throws IOException {
+        return getRecordJson(subDomain, null);
+    }
+
+    @Override
     public List<Records> getRecordList(String keyword) throws IOException {
         record.setKeyword(keyword);
         return getRecordList();
@@ -211,5 +240,16 @@ public class DnsPodServerImpl implements DnsPodServer {
                 return JSON.parseObject(body.string());
             } else throw new RuntimeException(String.valueOf(res.code()));
         } else throw new RuntimeException(String.valueOf(res.code()));
+    }
+
+    @Override
+    public String getPublicIp() throws IOException {
+        Response execute = client.newCall(new Request.Builder()
+                .url("https://api.ipify.org")
+                .build()).execute();
+        ResponseBody rb;
+        if (execute.isSuccessful() && (rb = execute.body()) != null)
+            return rb.string();
+        return null;
     }
 }

@@ -1,5 +1,8 @@
 package com.linhei.autoupdatednsrecord.server.impl;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.linhei.autoupdatednsrecord.entity.Records;
+import com.linhei.autoupdatednsrecord.server.DnsPodServer;
 import com.linhei.autoupdatednsrecord.server.MailServer;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,8 @@ public class MailServerImpl implements MailServer {
 
     @Autowired
     private MailProperties mailProperties;
+    @Autowired
+    private DnsPodServer dnsPodServer;
 
     @Value("${mail_server.last_size:-1}")
     private String lastSize;
@@ -37,10 +42,14 @@ public class MailServerImpl implements MailServer {
      * 收件箱持续连接
      * File 打开文件
      * Map用于处理子字段
+     * D监控提醒
      */
     Folder inbox = null;
     File file = new File("./external.yml");
     private Map<String, Object> valueMap;
+    private static final String ERROR = "【D监控】网站故障提醒";
+    private String recordListJson;
+    private String lastIpaddr;
 
     @Override
     @Scheduled(fixedDelay = 5000)
@@ -64,13 +73,27 @@ public class MailServerImpl implements MailServer {
         Message[] messages = inbox.getMessages();
         int n = messages.length;
         if (n > 0 && n > Integer.parseInt(lastSize)) {
-            Message latestMessage = messages[n - 1];
-            log.info(latestMessage.getSubject());
+            if (messages[n - 1].getSubject().contains(ERROR)) {
+                if (recordListJson == null) recordListJson = dnsPodServer.getRecordListJson();
+                if (this.lastIpaddr == null) lastIpaddr = getLastIpAddr();
+                String publicIp = dnsPodServer.getPublicIp();
+                recordListJson = recordListJson.replaceAll(lastIpaddr, publicIp);
+                // 记录日志
+                log.info(dnsPodServer.modifyRecord(recordListJson));
+                // 更新上次的IP
+                lastIpaddr = publicIp;
+            }
+            // 修改上次读取邮箱时的邮箱大小
             lastSize = String.valueOf(n);
-            log.info(lastSize);
-            updateConfigProperty("mail_server.last_size", String.valueOf(lastSize));
+            updateConfigProperty("mail_server.last_size", lastSize);
         }
         inbox.close();
+    }
+
+    private String getLastIpAddr() throws IOException {
+        return new Records(JSONObject.parseObject(dnsPodServer.getRecordJson("@", "A", "默认"))
+                .get("records").toString())
+                .getValue();
     }
 
     /**

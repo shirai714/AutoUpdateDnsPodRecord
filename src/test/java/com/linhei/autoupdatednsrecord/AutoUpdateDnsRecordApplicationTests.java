@@ -65,28 +65,12 @@ class AutoUpdateDnsRecordApplicationTests {
 
     @Test
     void test() {
-        String json = """
-                {
-                "id": "record id",
-                "sub_domain": "test",
-                "record_type": "A",
-                "record_line": "默认",
-                "record_line_id": "0",
-                "value": "ip",
-                "weight": null,
-                "mx": "0",
-                "ttl": "120",
-                "enabled": "1",
-                "monitor_status": "",
-                "remark": "",
-                "updated_on": "2023-05-18 21:48:43",
-                "domain_id": "domain id"
-                }""";
-
-
-        Records test = JSONObject.parseObject(json, Records.class);
-        System.out.println(test);
-        log.info(test.toJson());
+        DnsPodServer dnsPodServer = new DnsPodServerImpl();
+        try {
+            System.out.println(dnsPodServer.getPublicIp());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
