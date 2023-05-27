@@ -18,12 +18,4 @@ public interface MailServer {
     void receiveEmails() throws MessagingException, IOException;
 
 
-    /**
-     * 更新yml配置文件
-     *
-     * @param key   key
-     * @param value value
-     * @throws IOException io异常
-     */
-    void updateConfigProperty(String key, String value) throws IOException;
 }

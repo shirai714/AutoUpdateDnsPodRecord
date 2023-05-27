@@ -7,10 +7,11 @@ import com.linhei.autoupdatednsrecord.entity.CreateRecord;
 import com.linhei.autoupdatednsrecord.entity.Record;
 import com.linhei.autoupdatednsrecord.entity.Records;
 import com.linhei.autoupdatednsrecord.server.DnsPodServer;
+import com.linhei.autoupdatednsrecord.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,6 +35,9 @@ public class DnsPodServerImpl implements DnsPodServer {
     private final static String SUCCESSFUL = "\"code\": \"1\"";
     private final static String MESSAGE = "message";
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     /**
      * token
      * 域名
@@ -45,17 +49,35 @@ public class DnsPodServerImpl implements DnsPodServer {
     private String domain;
     @Value("${record.lang:cn}")
     private String lang;
+    @Value("${record.redisConfig.token:}")
+    private String keyToken;
+    @Value("${record.redisConfig.domain:}")
+    private String keyDomain;
 
 
     OkHttpClient client = new OkHttpClient();
-    Record record = new Record(loginToken, lang, domain);
+    Record record = null;
     FormBody.Builder builder = new FormBody.Builder();
 
     /**
      * 将token和域名信息添加到 FormBody.Builder 中
      */
     private void setBuilder() {
+        if (loginToken == null || domain == null || "".equals(loginToken) || "".equals(domain)) {
+            getRedisConfig();
+        }
+
+        if (record == null) record = new Record(loginToken, lang, domain);
         setParameter(JSON.parseObject(record.toJson()));
+    }
+
+    private void getRedisConfig() {
+        if (keyToken == null || keyDomain == null || "".equals(keyToken) || "".equals(keyDomain))
+            throw new RuntimeException("请配置redis或在 external.yml 配置文件中配置login_token和domain");
+        loginToken = String.valueOf(redisUtil.get(keyToken));
+        domain = String.valueOf(redisUtil.get(keyDomain));
+        if (loginToken == null || domain == null || "".equals(loginToken) || "".equals(domain))
+            throw new RuntimeException("请在redis配置 external.yml 指定的键值对");
     }
 
     /**
