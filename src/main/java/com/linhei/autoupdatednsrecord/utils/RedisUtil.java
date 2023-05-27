@@ -2,6 +2,8 @@ package com.linhei.autoupdatednsrecord.utils;
 
 
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -19,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private Environment environment;
 
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -572,5 +577,14 @@ public class RedisUtil {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    /**
+     * @return 是否有redis的配置文件
+     */
+    public boolean isRedisConfigured() {
+        return environment.containsProperty("spring.data.redis.sentinel.nodes")
+                || (environment.containsProperty("spring.data.redis.host") && environment.containsProperty("spring.data.redis.port"))
+                || environment.containsProperty("spring.data.redis.cluster.nodes");
     }
 }
