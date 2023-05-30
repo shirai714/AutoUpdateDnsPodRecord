@@ -40,7 +40,7 @@ public class MailServerImpl implements MailServer {
 
     private final Utils util = new Utils();
 
-    @Value("${mailConfig.lastSize:-1}")
+    @Value("${mailConfig.last_size:-1}")
     private String lastSize;
     @Value("${mailConfig.redisConfig.lastIpaddrKey:'last_ip_addr'}")
     private String lastIpaddrKey;
@@ -130,7 +130,11 @@ public class MailServerImpl implements MailServer {
             redisUtil.set(lastIpaddrKey, lastIpaddr);
             redisUtil.set(lastSizeKey, lastSize);
         }
+<<<<<<< HEAD
         util.updateConfigProperty("mailConfig.lastSize", lastSize, file);
+=======
+        util.updateConfigProperty("mailConfig.last_size", lastSize, file);
+>>>>>>> dev
     }
 
     private String getLastIpAddr() throws IOException {
