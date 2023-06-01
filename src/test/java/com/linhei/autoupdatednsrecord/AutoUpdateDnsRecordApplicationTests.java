@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
@@ -23,6 +24,9 @@ class AutoUpdateDnsRecordApplicationTests {
 
     @Autowired
     DnsPodServer dnsPodServer;
+
+    @Value("${record.test.ip}")
+    String ip;
 
     @Test
     void contextLoads() {
