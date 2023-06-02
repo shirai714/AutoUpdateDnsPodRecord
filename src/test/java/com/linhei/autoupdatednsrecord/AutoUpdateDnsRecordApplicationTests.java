@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
@@ -24,13 +25,16 @@ class AutoUpdateDnsRecordApplicationTests {
     @Autowired
     DnsPodServer dnsPodServer;
 
+    @Value("${record.test.ip:}")
+    String ip;
+
     @Test
     void contextLoads() {
         DnsPodServer api = new DnsPodServerImpl();
         long start = System.currentTimeMillis();
         File file = new File("records.json");
 
-        CreateRecord test = new CreateRecord("test", RecordConfig.A, "默认", "ip", "1", "60");
+        CreateRecord test = new CreateRecord("test", RecordConfig.A, "默认", ip, "1", "60");
         try {
 
             // 使用删除方法删除刚刚添加的记录
@@ -54,7 +58,7 @@ class AutoUpdateDnsRecordApplicationTests {
                     "updated_on": "2023-05-18 21:48:43",
                     "domain_id": "domain id"
                     }""");
-            tmp.setValue("ip");
+            tmp.setValue(ip);
             tmp.setId(recordId);
 //            System.out.println(tmp);
             log.info(tmp.toString());
