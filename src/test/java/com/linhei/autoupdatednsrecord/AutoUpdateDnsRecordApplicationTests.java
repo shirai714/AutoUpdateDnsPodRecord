@@ -58,7 +58,7 @@ class AutoUpdateDnsRecordApplicationTests {
                     "updated_on": "2023-05-18 21:48:43",
                     "domain_id": "domain id"
                     }""");
-            tmp.setValue(ip);
+            tmp.setValue("144.124.152.220");
             tmp.setId(recordId);
 //            System.out.println(tmp);
             log.info(tmp.toString());
