@@ -25,8 +25,6 @@ rerecord:
   redisConfig:
     token: login_token
     domain: domain
-  test:
-    ip: ip
 
 mailConfig:
   lastSize: 0
