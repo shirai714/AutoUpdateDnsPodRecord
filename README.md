@@ -1,6 +1,7 @@
 # AutoUpdateDnsRecord
-external.yml的样例配置
+## 通过监控邮箱的异常邮件实现自动更新DnsPod的域名记录的IP(解决服务器动态IP问题)
 
+external.yml的样例配置
 ```yml
 spring:
   data:
