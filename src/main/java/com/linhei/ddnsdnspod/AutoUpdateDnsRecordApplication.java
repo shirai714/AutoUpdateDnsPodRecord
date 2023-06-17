@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord;
+package com.linhei.ddnsdnspod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

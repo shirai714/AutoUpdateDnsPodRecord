@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord.entity;
+package com.linhei.ddnsdnspod.entity;
 
 /**
  * @author linhei

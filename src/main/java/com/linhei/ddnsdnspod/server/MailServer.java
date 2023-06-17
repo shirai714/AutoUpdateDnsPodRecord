@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord.server;
+package com.linhei.ddnsdnspod.server;
 
 import jakarta.mail.MessagingException;
 

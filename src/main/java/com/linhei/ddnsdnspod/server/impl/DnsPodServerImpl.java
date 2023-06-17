@@ -1,13 +1,13 @@
-package com.linhei.autoupdatednsrecord.server.impl;
+package com.linhei.ddnsdnspod.server.impl;
 
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.linhei.autoupdatednsrecord.entity.CreateRecord;
-import com.linhei.autoupdatednsrecord.entity.Record;
-import com.linhei.autoupdatednsrecord.entity.Records;
-import com.linhei.autoupdatednsrecord.server.DnsPodServer;
-import com.linhei.autoupdatednsrecord.utils.RedisUtil;
+import com.linhei.ddnsdnspod.entity.CreateRecord;
+import com.linhei.ddnsdnspod.entity.Record;
+import com.linhei.ddnsdnspod.entity.Records;
+import com.linhei.ddnsdnspod.server.DnsPodServer;
+import com.linhei.ddnsdnspod.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
