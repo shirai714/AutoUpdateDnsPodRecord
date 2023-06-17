@@ -1,7 +1,7 @@
-package com.linhei.autoupdatednsrecord.server;
+package com.linhei.ddnsdnspod.server;
 
-import com.linhei.autoupdatednsrecord.entity.CreateRecord;
-import com.linhei.autoupdatednsrecord.entity.Records;
+import com.linhei.ddnsdnspod.entity.CreateRecord;
+import com.linhei.ddnsdnspod.entity.Records;
 
 import java.io.IOException;
 import java.util.List;

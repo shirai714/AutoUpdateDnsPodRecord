@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord.entity;
+package com.linhei.ddnsdnspod.entity;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

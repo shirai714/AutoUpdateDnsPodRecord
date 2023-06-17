@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord.utils;
+package com.linhei.ddnsdnspod.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;

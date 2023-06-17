@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.linhei</groupId>
-    <artifactId>AutoUpdateDnsRecord</artifactId>
+    <artifactId>DnsPod-DDns-java</artifactId>
     <version>1.0.0</version>
-    <name>AutoUpdateDnsRecord</name>
+    <name>DnsPod-DDNS-java</name>
     <description>自动更新DnsPod的域名解析记录</description>
     <properties>
         <java.version>17</java.version>

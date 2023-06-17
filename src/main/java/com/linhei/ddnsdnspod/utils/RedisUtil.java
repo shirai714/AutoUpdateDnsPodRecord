@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord.utils;
+package com.linhei.ddnsdnspod.utils;
 
 
 import jakarta.annotation.Resource;

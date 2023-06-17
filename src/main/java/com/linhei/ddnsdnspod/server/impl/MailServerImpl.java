@@ -1,13 +1,13 @@
-package com.linhei.autoupdatednsrecord.server.impl;
+package com.linhei.ddnsdnspod.server.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.linhei.autoupdatednsrecord.entity.Records;
-import com.linhei.autoupdatednsrecord.server.DnsPodServer;
-import com.linhei.autoupdatednsrecord.server.MailServer;
-import com.linhei.autoupdatednsrecord.utils.RedisUtil;
-import com.linhei.autoupdatednsrecord.utils.Utils;
+import com.linhei.ddnsdnspod.entity.Records;
+import com.linhei.ddnsdnspod.server.DnsPodServer;
+import com.linhei.ddnsdnspod.server.MailServer;
+import com.linhei.ddnsdnspod.utils.RedisUtil;
+import com.linhei.ddnsdnspod.utils.Utils;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;

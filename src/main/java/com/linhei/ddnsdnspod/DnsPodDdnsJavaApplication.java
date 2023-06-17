@@ -1,4 +1,4 @@
-package com.linhei.autoupdatednsrecord;
+package com.linhei.ddnsdnspod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,10 +11,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableRedisRepositories
-public class AutoUpdateDnsRecordApplication {
+public class DnsPodDdnsJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AutoUpdateDnsRecordApplication.class, args);
+        SpringApplication.run(DnsPodDdnsJavaApplication.class, args);
     }
 
 }
