@@ -11,10 +11,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableRedisRepositories
-public class DnsPodDdnsJavaApplication {
+public class DnsPodDDnsJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DnsPodDdnsJavaApplication.class, args);
+        SpringApplication.run(DnsPodDDnsJavaApplication.class, args);
     }
 
 }
